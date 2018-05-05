@@ -2,46 +2,8 @@ import React, { Component } from 'react';
 import { ActivityIndicator, ImageBackground, Text, StyleSheet, View, ScrollView, Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Version can be specified in package.json
 import { createBottomTabNavigator, TabBarBottom } from 'react-navigation';
-
-//export default class App extends Component {
-//    
-
-//
-//    render()
-//    {
-        
-//        else{
-//            return(
-//                <View style={styles.container}>
-//                    <ImageBackground 
-//                        style={styles.backgroundImage} 
-//                        source={require('./Slike/velenje_ozadje_v2.jpg')}
-//                        resizeMode='cover'
-//                        blurRadius={10}>
-//                        <ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'center', width: '100%'}}>
-//
-//                              //Lokalc View
-//                                <View style={styles.panel}>
-//                                <Text style={styles.headline}>Številka postaje: {this.state.lokalcData.result[0].id.attr_value}</Text>
-//                                <Text style={styles.headline}>Naslov: {this.state.lokalcData.result[0].naslov.attr_value}</Text>
-//                              </View>
-//                              //Bicy View
-//                              <View style={styles.panel}>
-//                                <Text style={styles.headline}>Postaja: {this.state.bicyData[0].station.attr_value}</Text>
-//                                <Text style={styles.headline}>Število koles: {this.state.bicyData[0].available.attr_value}</Text>
-//                              </View>
-//                                <View style={styles.panel}>
-//                                <Text style={styles.headline}>Postaja: {this.state.bicyData[0].station.attr_value}</Text>
-//                                <Text style={styles.headline}>Število koles: {this.state.bicyData[0].available.attr_value}</Text>
-//                              </View>
-//                        </ScrollView>
-//                    </ImageBackground>
-//                </View>
-//            );
-//        }
-//    }
-//}
-
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 
 class lokalcScreen extends Component {
     constructor(props){
@@ -50,7 +12,7 @@ class lokalcScreen extends Component {
     }
     
     componentDidMount(){
-        setInterval(() => this.getApiData(), 5000);
+        setInterval(() => this.getApiData(), 1000);
     }
     
     async getApiData()
@@ -80,7 +42,7 @@ class lokalcScreen extends Component {
            console.error(error); 
         });
     }
-
+    
     render()
     {
         if(this.state.isLoading)
@@ -99,25 +61,29 @@ class lokalcScreen extends Component {
                 </View>
             );    
         }
-
-        else{
+        else{        
             return(
-                <View style={styles.container}>
-                    <ImageBackground 
-                        style={styles.backgroundImage} 
-                        source={require('./Slike/velenje_ozadje_v2.jpg')}
-                        resizeMode='cover'
-                        blurRadius={10}>
-                        <ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'center', width: '100%'}}>
-
-                              //Lokalc View
-                                <View style={styles.panel}>
-                                <Text style={styles.headline}>Številka postaje: {this.state.lokalcData.result[0].id.attr_value}</Text>
-                                <Text style={styles.headline}>Naslov: {this.state.lokalcData.result[0].naslov.attr_value}</Text>
-                              </View>
-                        </ScrollView>
-                    </ImageBackground>
-                </View>
+                <MapView
+                      style={{ flex: 1 }}
+                      initialRegion={{
+                          latitude: 46.362274,
+                          longitude: 15.110658,
+                          latitudeDelta: 0.0922,
+                          longitudeDelta: 0.0421,
+                        }}
+                        showsUserLocation={true}
+				        showsMyLocationButton={true}
+                        >
+                
+                    <MapView.Marker
+                        coordinate={{
+                            latitude: parseFloat(this.state.lokalcData.result[0].geoLat.attr_value),
+                            longitude: parseFloat(this.state.lokalcData.result[0].geoLon.attr_value)
+                        }}
+                        title={JSON.stringify(this.state.lokalcData.result[0].naslov.attr_value)}
+                        description={"Postaja številka " + JSON.stringify(this.state.lokalcData.result[0].id.attr_value)}
+                    />
+                </MapView>
             );
         }
     }
@@ -181,21 +147,17 @@ class bicyScreen extends Component {
         }
         else{
             return(
-                <View style={styles.container}>
-                    <ImageBackground 
-                        style={styles.backgroundImage} 
-                        source={require('./Slike/velenje_ozadje_v2.jpg')}
-                        resizeMode='cover'
-                        blurRadius={10}>
-                        <ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'center', width: '100%'}}>
-                          //Bicy View
-                          <View style={styles.panel}>
-                            <Text style={styles.headline}>Postaja: {this.state.bicyData[0].station.attr_value}</Text>
-                            <Text style={styles.headline}>Število koles: {this.state.bicyData[0].available.attr_value}</Text>
-                        </View>
-                        </ScrollView>
-                    </ImageBackground>
-                </View>
+                <MapView
+                    style={{ flex: 1 }}
+                    initialRegion={{
+                      latitude: 46.362274,
+                      longitude: 15.110658,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                    }}
+                    showsUserLocation={true}
+				    showsMyLocationButton={true}
+                  />
             );
         }
     }
@@ -238,12 +200,12 @@ const styles = StyleSheet.create({
   panel: {
     height: 200,
     borderRadius: 4,
-    padding: 20,
+    padding: 30,
     marginTop: 50,
     marginLeft: 20,
     marginRight: 20,
     marginBottom: 30,
-    backgroundColor: 'white',
+    backgroundColor: '#f2f2f2',
   },
   headline: {
     fontSize: 20,
