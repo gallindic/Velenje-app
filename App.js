@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { ActivityIndicator, ImageBackground, Text, StyleSheet, View, ScrollView } from 'react-native';
 
 export default class App extends Component {
@@ -35,58 +34,23 @@ export default class App extends Component {
                  isLoading: false
               });  
             })
-=======
-import { StyeSheet, Text, View, ActivityIndicator } from 'react-native';
-
-export default class App extends Component {
-    
-    constructor(props)
-    {
-        super();
-        this.state = { isLoading: true, jsonResponse: '' }
-    }
-    
-    componentDidMount()
-    {
-	    
-        setInterval(() => this.GetApiData(), 10000);
-    }
-    
-    async GetApiData()
-    {
-	    //Prenesi podatke iz API-ja
-        return fetch ('http://oc.velenje.si/api/v1/organizations/lokalc-postaje')
-        .then((response) => response.json())
-        .then((data) => {
-            this.setState({
-                jsonResponse: data, isLoading: false
-            });
->>>>>>> 60d008b0983fc06bc86f725912fecb7c8ace1be8
         })
         .catch((error) => {
            console.error(error); 
         });
     }
-    
-<<<<<<< HEAD
-    render(){
-        if(this.state.isLoading)
-        {
-            return (
-                <View style={styles.loadingContainer}>
-=======
+
     render()
     {
         if(this.state.isLoading)
         {
             return (
                 <View style={{flex: 1, padding: 30}}>
->>>>>>> 60d008b0983fc06bc86f725912fecb7c8ace1be8
                     <ActivityIndicator size="large" color="#0000ff" />
                 </View>
             );    
         }
-<<<<<<< HEAD
+
         else{
             return(
                 <View style={styles.container}>
@@ -146,22 +110,3 @@ const styles = StyleSheet.create({
     color: 'black'
   }
 })
-=======
-        else
-        {
-	        return (
-                <View style={{flex: 1, padding: 30}}>
-                   <Text>
-                   Številka postaje: {this.state.jsonResponse.id.attr_value}
-                   </Text>
-                   
-                   
-                   <Text>
-                   Trenutni čas: {new Date().toLocaleString()}
-                   </Text>
-                </View>
-            );   
-        }
-    }
-}
->>>>>>> 60d008b0983fc06bc86f725912fecb7c8ace1be8
